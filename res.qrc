@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/weather-0/大雪.png</file>
+        <file>images/weather-0/大雨.png</file>
+        <file>images/weather-0/冻雨.png</file>
+        <file>images/weather-0/多云.png</file>
+        <file>images/weather-0/雷电.png</file>
+        <file>images/weather-0/烈日.png</file>
+        <file>images/weather-0/浓云.png</file>
+        <file>images/weather-0/雾气.png</file>
+        <file>images/weather-0/小雪.png</file>
+        <file>images/weather-0/小雨.png</file>
+        <file>images/weather-0/雨夹雪.png</file>
+        <file>images/weather-0/云.png</file>
+        <file>images/weather-0/风.png</file>
+        <file>images/weather-0/pm2.5.png</file>
+        <file>images/weather-0/空气质量.png</file>
+        <file>images/weather-0/湿度.png</file>
+        <file>images/weather-0/搜索.png</file>
+        <file>images/weather-0/退出.png</file>
+        <file>images/易客云官方图标/bingbao.png</file>
+        <file>images/易客云官方图标/feng.png</file>
+        <file>images/易客云官方图标/lei.png</file>
+        <file>images/易客云官方图标/mai.png</file>
+        <file>images/易客云官方图标/qing.png</file>
+        <file>images/易客云官方图标/shachen.png</file>
+        <file>images/易客云官方图标/wu.png</file>
+        <file>images/易客云官方图标/xue.png</file>
+        <file>images/易客云官方图标/yin.png</file>
+        <file>images/易客云官方图标/yu.png</file>
+        <file>images/易客云官方图标/yun.png</file>
+    </qresource>
+</RCC>
