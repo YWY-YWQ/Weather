@@ -1,7 +1,7 @@
 # Weather
 
 #### 介绍
-基于Qt开发的一个天气预报软件（这只是出版，后续还会更新）
+基于Qt开发的一个天气预报软件（后续还会更新）
 
 ![输入图片说明](images/weather-0/KUWY%5BAH%7B~WK%5DPUVM~O%25CE%25Q.png)
 
