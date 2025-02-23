@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
-    <height>860</height>
+    <width>538</width>
+    <height>839</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -139,7 +139,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,2,3,9">
+    <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,2,3,6">
      <item>
       <widget class="QWidget" name="widget01" native="true">
        <property name="maximumSize">
@@ -265,6 +265,9 @@
           </colorrole>
          </disabled>
         </palette>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="4,0,0,3">
         <property name="spacing">
@@ -2807,34 +2810,14 @@ border-radius: 7px;</string>
          <widget class="QWidget" name="widget0404" native="true">
           <property name="minimumSize">
            <size>
-            <width>0</width>
-            <height>100</height>
+            <width>500</width>
+            <height>200</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>500</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(170, 170, 170);
-border-radius: 10px;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QWidget" name="widget0405" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>500</width>
-            <height>16777215</height>
+            <height>200</height>
            </size>
           </property>
           <property name="styleSheet">

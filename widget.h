@@ -60,7 +60,14 @@ private:
     void parseWeatherJsonDataAWeak(QByteArray rawData);
     void Init();
     void updataUI();
+    void drawTempLine();
     void drawTempLineHigh();
     void drawTempLineLow();
+
+    // QWidget interface
+protected:
+    virtual void enterEvent(QEnterEvent *event) override;
+    virtual void leaveEvent(QEvent *event) override;
 };
+
 #endif // WIDGET_H

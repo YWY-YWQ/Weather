@@ -65,13 +65,13 @@ void Widget::mouseMoveEvent(QMouseEvent *event)
 bool Widget::eventFilter(QObject *watched, QEvent *event)
 {
     if(watched==ui->widget0404&&event->type()==QEvent::Paint){
-        drawTempLineHigh();
+        drawTempLine();
         return true;//表示事件被处理
     }
-    if(watched==ui->widget0405&&event->type()==QEvent::Paint){
-        drawTempLineLow();
-        return true;//表示事件被处理
-    }
+    // if(watched==ui->widget0405&&event->type()==QEvent::Paint){
+    //     drawTempLineLow();
+    //     return true;//表示事件被处理
+    // }
     return QWidget::eventFilter(watched,event);
 }
 
@@ -142,9 +142,12 @@ void Widget::parseWeatherJsonDataAWeak(QByteArray rawData)
 
 void Widget::Init()
 {
+    // 设置窗口属性
     setFixedSize(538,995);
-    setWindowFlag(Qt::FramelessWindowHint);
-
+    setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
+    // setAttribute(Qt::WA_TranslucentBackground);
+    //设置透明度
+    this->setWindowOpacity(0.7);
     //新建一个菜单组件
     menuQuit=new QMenu(this);
     //设置菜单项文字颜色
@@ -189,7 +192,7 @@ void Widget::Init()
     weaImgToPathMap.insert("qing",":/images/images/易客云官方图标/qing.png");
 
     ui->widget0404->installEventFilter(this);
-    ui->widget0405->installEventFilter(this);
+    // ui->widget0405->installEventFilter(this);
 }
 
 void Widget::updataUI()
@@ -263,6 +266,67 @@ void Widget::updataUI()
     update();
 }
 
+void Widget::drawTempLine()
+{
+    QPainter painter(ui->widget0404);
+    //最高温度与上边缘的差xx，最低温度与下边缘的差xx
+    int xx=30,height=ui->widget0404->height();
+    //计算最高温，最低温
+    int highTemp=-100,lowTemp=100,dt=0;
+    for(int i=0;i<6;++i){
+        if(i==0){//初始化
+            highTemp=days[i].mTempHigh.toInt();
+            lowTemp=days[i].mTempLow.toInt();
+        }else{
+            highTemp=std::max(highTemp,days[i].mTempHigh.toInt());
+            lowTemp=std::min(lowTemp,days[i].mTempLow.toInt());
+        }
+    }
+    //计算每摄氏度的像素差dt
+    dt=highTemp-lowTemp;
+    qDebug()<<"ui->widget0404->height()="<<ui->widget0404->height();
+    qDebug()<<"highTemp="<<highTemp;
+    qDebug()<<"lowTemp="<<lowTemp;
+    qDebug()<<"dt=="<<dt;
+    if(dt==0) dt=1;
+    int step=(height-xx*2)/dt;
+    qDebug()<<"step=="<<step;
+    //画出高温线
+    painter.setRenderHint(QPainter::Antialiasing,true);
+    painter.setBrush(Qt::yellow);
+    painter.setPen(Qt::yellow);
+    QPoint highPoint[6];
+    for(int i=0;i<6;++i){
+        highPoint[i].setX(mAirqList[i]->x()+mAirqList[i]->width()/2);
+        highPoint[i].setY(xx+(highTemp-days[i].mTempHigh.toInt())*step);
+        qDebug()<<"point="<<highPoint[i];
+        //画出六个点
+        painter.drawEllipse(highPoint[i],3,3);
+        //画出当天温度
+        painter.drawText(highPoint[i].x()-5,highPoint[i].y()-15,days[i].mTempHigh+"°");
+        //画线
+        if(i!=0){
+            painter.drawLine(highPoint[i-1],highPoint[i]);
+        }
+    }
+    //画出低温线
+    painter.setBrush(Qt::blue);
+    painter.setPen(QColor(70,192,203));
+    QPoint lowPoint[6];
+    for(int i=0;i<6;++i){
+        lowPoint[i].setX(mAirqList[i]->x()+mAirqList[i]->width()/2);
+        lowPoint[i].setY(xx+(highTemp-days[i].mTempLow.toInt())*step);
+        //画出六个点
+        painter.drawEllipse(QPoint(lowPoint[i]),3,3);
+        //画出当天温度
+        painter.drawText(lowPoint[i].x()-5,lowPoint[i].y()+15,days[i].mTempLow+"°");
+        //画线
+        if(i){
+            painter.drawLine(lowPoint[i-1],lowPoint[i]);
+        }
+    }
+}
+
 void Widget::drawTempLineHigh()
 {
     QPainter painter(ui->widget0404);
@@ -297,34 +361,35 @@ void Widget::drawTempLineHigh()
 
 void Widget::drawTempLineLow()
 {
-    QPainter painter(ui->widget0405);
-    painter.setRenderHint(QPainter::Antialiasing,true);
-    painter.setBrush(Qt::blue);
-    painter.setPen(QColor(70,192,203));
+//     QPainter painter(ui->widget0405);
+//     painter.setRenderHint(QPainter::Antialiasing,true);
+//     painter.setBrush(Qt::blue);
+//     painter.setPen(QColor(70,192,203));
 
-    int ave;
-    int sum=0;
-    int offSet=0;
-    int middle=ui->widget0405->height()/2;
-    for(int i=0;i<6;++i){
-        sum+=days[i].mTempLow.toInt();
-    }
-    ave=sum/6;
+//     int ave;
+//     int sum=0;
+//     int offSet=0;
+//     int middle=ui->widget0405->height()/2;
+//     for(int i=0;i<6;++i){
+//         sum+=days[i].mTempLow.toInt();
+//     }
+//     ave=sum/6;
 
-    //定义6个点
-    QPoint points[6];
-    for(int i=0;i<6;++i){
-        points[i].setX(mAirqList[i]->x()+mAirqList[i]->width()/2);
-        offSet=(days[i].mTempLow.toInt()-ave)*3;
-        points[i].setY(middle-offSet);
-        //画出六个点
-        painter.drawEllipse(QPoint(points[i]),3,3);
-        //画出当天温度
-        painter.drawText(points[i].x()-15,points[i].y()-15,days[i].mTempLow+"°");
-    }
-    for(int i=0;i<5;++i){
-        painter.drawLine(points[i],points[i+1]);
-    }
+//     //定义6个点
+//     QPoint points[6];
+//     for(int i=0;i<6;++i){
+//         points[i].setX(mAirqList[i]->x()+mAirqList[i]->width()/2);
+//         offSet=(days[i].mTempLow.toInt()-ave)*3;
+//         points[i].setY(middle-offSet);
+//         //画出六个点
+//         painter.drawEllipse(QPoint(points[i]),3,3);
+//         //画出当天温度
+//         painter.drawText(points[i].x()-15,points[i].y()-15,days[i].mTempLow+"°");
+//         qDebug()<<"lowpoint="<<points[i];
+//     }
+//     for(int i=0;i<5;++i){
+//         painter.drawLine(points[i],points[i+1]);
+//     }
 }
 
 void Widget::readHttpRply(QNetworkReply *reply)
@@ -367,3 +432,14 @@ void Widget::on_lineEdit_returnPressed()
     on_btnSearch_clicked();
 }
 
+void Widget::enterEvent(QEnterEvent *event)
+{
+    setWindowOpacity(1.0);  // 鼠标进入时完全不透明
+    QWidget::enterEvent(event);
+}
+
+void Widget::leaveEvent(QEvent *event)
+{
+    setWindowOpacity(0.7);  // 鼠标离开时恢复半透明
+    QWidget::leaveEvent(event);
+}
