@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "iofile.h"
 #include <QMouseEvent>
 #include <QDebug>
 #include <QMenu>
@@ -13,6 +14,7 @@
 #include <QMap>
 #include <QLabel>
 #include <QPainter>
+#include <QFile>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -20,7 +22,10 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
     Init();
-
+    //初始化天气数据，从本地获取
+    IOFile iofile;
+    parseWeatherJsonDataAWeak(iofile.JsonFiletoByteArray());
+    QDate date=QDate::currentDate();
     //由QNetworkAccessManager发起get请求
     manager=new QNetworkAccessManager(this);
     connect(manager,&QNetworkAccessManager::finished,[](){
@@ -32,7 +37,9 @@ Widget::Widget(QWidget *parent)
     QUrl weatherApi("http://gfeljm.tianqiapi.com/api?unescape=1&version=v61&appid=35269352&appsecret=Inq9mkx1");
     QUrl api("192.168.1.1");
     QNetworkRequest res(strUrl);
-    reply=manager->get(res);
+    if(!iofile.isOK()){
+        // reply=manager->get(res);
+    }
     //QNetworkRequest网络请求后进行数据读取
     connect(manager,&QNetworkAccessManager::finished,this,&Widget::readHttpRply);
 }
@@ -136,8 +143,8 @@ void Widget::parseWeatherJsonDataAWeak(QByteArray rawData)
                 days[i].mHu=obj["humidity"].toString();
             }
         }
+        updataUI();
     }
-    updataUI();
 }
 
 void Widget::Init()
@@ -282,7 +289,7 @@ void Widget::drawTempLine()
             lowTemp=std::min(lowTemp,days[i].mTempLow.toInt());
         }
     }
-    //计算每摄氏度的像素差dt
+    //计算每摄氏度的像素差step
     dt=highTemp-lowTemp;
     qDebug()<<"ui->widget0404->height()="<<ui->widget0404->height();
     qDebug()<<"highTemp="<<highTemp;
@@ -399,6 +406,10 @@ void Widget::readHttpRply(QNetworkReply *reply)
     if(reply->error()==QNetworkReply::NoError&&resCode==200){
         //大多数服务器返回的是utf-8字符
         QByteArray data=reply->readAll();
+
+        IOFile iofile;
+        iofile.byteArrayJsonToFile(data,QDate::currentDate().toString());
+
         parseWeatherJsonDataAWeak(data);
         qDebug()<<QString::fromUtf8(data);
     }else{

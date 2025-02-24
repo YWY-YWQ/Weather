@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     day.cpp \
+    iofile.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
     day.h \
+    iofile.h \
     widget.h
 
 FORMS += \
