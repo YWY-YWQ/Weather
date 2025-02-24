@@ -38,7 +38,7 @@ Widget::Widget(QWidget *parent)
     QUrl api("192.168.1.1");
     QNetworkRequest res(strUrl);
     if(!iofile.isOK()){
-        // reply=manager->get(res);
+        reply=manager->get(res);
     }
     //QNetworkRequest网络请求后进行数据读取
     connect(manager,&QNetworkAccessManager::finished,this,&Widget::readHttpRply);
