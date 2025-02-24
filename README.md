@@ -3,7 +3,7 @@
 #### 介绍
 基于Qt开发的一个天气预报软件（后续还会更新）
 
-![输入图片说明](images/weather-0/MATFKGXWR42(W3D3I%25SS%60$K.png)
+![输入图片说明](images/weather-0/show.png)
 
 #### 软件架构
 Qt
